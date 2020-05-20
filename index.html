@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://unpkg.com/adaptivecards/dist/adaptivecards.js"></script>
+    <script src="script.js"></script>
+</head>
+
+<body onLoad="SetUp();">
+    <section id="chat-container">
+        <div class="chat-field">
+            <img src="ESC.png" alt="ESC-Avatar">
+            <p class="txt">Hello. How are you today?</p>
+            <span class="time">11:00:00</span>
+        </div>
+
+        <div class="chat-field darker right">
+            <p class="txt">Hey! I'm fine. Thanks for asking!</p>
+            <span class="time">11:01:00</span>
+        </div>
+
+        <div class="chat-field">
+            <img src="ESC.png" alt="ESC-Avatar">
+            <p class="txt">Sweet! So, what do you wanna do today?</p>
+            <span class="time">11:02:00</span>
+        </div>
+
+        <div class="chat-field darker right">
+            <p class="txt">Nah, I dunno. Play soccer.. or learn more coding perhaps?</p>
+            <span class="time">11:05:00</span>
+        </div>
+    </section>
+
+    <section id="footer">
+        <form id="inputForm" action="javascript:SubmitInput();">
+            <input type="text" id="inputField" name="inputField" placeholder="Stellen Sie hier Ihre Frage">
+            <input type="submit" id="submit" value="&#x2B9E">
+        </form>
+        <div id="version">
+            Version 0.0.0 (pre-alpha)
+        </div>
+    </section>
+</body>
+
+</html>

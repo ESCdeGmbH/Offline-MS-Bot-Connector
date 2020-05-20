@@ -1,0 +1,89 @@
+body {
+    font-family: 'Segoe UI', 'Helvetica Neue', Tahoma, Verdana, sans-serif;
+    overflow-wrap: break-word;
+    word-break: break-word;
+}
+
+.txt {
+    margin: 0;
+}
+
+.chat-field {
+    float: left;
+    max-width: 75%;
+    border: 2px solid #dedede;
+    background-color: #f1f1f1;
+    border-radius: 5px;
+    padding: 10px;
+    margin: 10px 0;
+    clear: both;
+}
+
+.right {
+    float: right;
+}
+
+.darker {
+    border-color: #ccc;
+    background-color: #ddd;
+}
+
+.chat-field img {
+    float: left;
+    max-width: 60px;
+    width: 100%;
+    margin-right: 20px;
+    background-color: white;
+    border-radius: 20%;
+}
+
+.time {
+    float: right;
+    color: #aaa;    
+    font-size: 0.7em;
+}
+
+#chat-container {
+    position: relative;
+    overflow-y: scroll;
+    height: 500px;
+    overflow-y: scroll;
+}
+
+/*begin: hide inner scrollbar*/
+#chat-container {
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none;  /* Internet Explorer 10+ */
+}
+#chat-container::-webkit-scrollbar { /* WebKit */
+    width: 0;
+    height: 0;
+}
+/*end: hide inner scrollbar*/
+
+#footer {
+    position: absolute;
+    padding: 10px;
+    background-color: white;
+    right: 0;
+    left: 0;
+    border-top: 2px solid #ccc;
+}
+
+#inputField {
+    float: left;
+    border: 1px solid #ccc;
+    width: calc(100% - 50px);
+    padding: 2.5px;
+}
+
+#submit {
+    float: right;
+}
+
+#version {
+    clear: both;
+    text-align: right;
+    font-size: 0.5em;
+    color: gray;
+}
