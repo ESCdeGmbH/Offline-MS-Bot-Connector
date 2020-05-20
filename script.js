@@ -84,9 +84,11 @@ function CreateTimeSpan() {
 
 function ParseTime() {
     let d = new Date();
-    let seconds = d.getSeconds();
-    let minutes = d.getMinutes();
-    return d.getHours() + ":" + (minutes > 9 ? minutes : "0" + minutes) + ":" + (seconds > 9 ? seconds : "0" + seconds);
+    return AddLeadingZero(d.getHours()) + ":" + AddLeadingZero(d.getMinutes()) + ":" + AddLeadingZero(d.getSeconds());
+}
+
+function AddLeadingZero(number) {
+    return number > 9 ? number : "0" + number;
 }
 
 function CreateText(content) {
