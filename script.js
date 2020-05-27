@@ -2,35 +2,9 @@
 
 const CHATFIELDTYPES = Object.freeze({ "user": 1, "bot": 2 });
 const BASE = "/api/messages";
+const BASE_OFFLINE = "/v3/conversations/"
 const HUB = "/receiverhub"
 const CONVERSATION_ID = "1";
-
-const HARDCODED_CARD = {
-    "type": "AdaptiveCard",
-    "version": "1.0",
-    "body": [
-        {
-            "type": "Image",
-            "url": "http://adaptivecards.io/content/adaptive-card-50.png"
-        },
-        {
-            "type": "TextBlock",
-            "text": "Hello **Adaptive Cards!**"
-        }
-    ],
-    "actions": [
-        {
-            "type": "Action.OpenUrl",
-            "title": "Learn more",
-            "url": "http://adaptivecards.io"
-        },
-        {
-            "type": "Action.OpenUrl",
-            "title": "GitHub",
-            "url": "http://github.com/Microsoft/AdaptiveCards"
-        }
-    ]
-};
 
 const connection = new signalR.HubConnectionBuilder()
     .withUrl(HUB)
@@ -51,16 +25,13 @@ connection.onclose(async () => {
     await start();
 });
 
-connection.on(CONVERSATION_ID, () => {
-    alert("ANGEKOMMEN");
-    /*const resp = await fetch(newUrl, {
-        method: 'POST',
-        credentials: 'include',
-        mode: 'cors'
+connection.on(CONVERSATION_ID, async () => {
+    const resp = await fetch(BASE_OFFLINE + CONVERSATION_ID + "/poll", {
+        method: 'POST'
     });
-    const status = await resp.status;
+    const status = await resp.status; // TODO: use status to check if result is valid
     const result = await resp.json();
-    return [status, result];*/
+    CreateAndAppendChatField(result[0].attachments[0].content, CHATFIELDTYPES.bot);
 });
 
 // Start the connection.
@@ -80,12 +51,11 @@ function CreateIcon() {
 function SubmitInput(event) {
     let input = document.getElementById("inputField").value;
     document.getElementById("inputField").value = "";
-    let chatField = CreateChatField(input, CHATFIELDTYPES.user);  // FÜR TESTZWECKE KANN HIER BOT STATT USER VERWENDET WERDEN
-    document.getElementById("chat-container").appendChild(chatField);
+    CreateAndAppendChatField(input, CHATFIELDTYPES.user);
     event.preventDefault();  // to prevent the page to getting redirected after clicking the submit button or pressing 'Enter'
 }
 
-function CreateChatField(content, type) {
+function CreateAndAppendChatField(content, type) {
     let chatFieldClass = "chat-field";
     let chatField = document.createElement("div");
     let renderedContent;
@@ -98,7 +68,7 @@ function CreateChatField(content, type) {
             let icon = CreateIcon();
             chatField.appendChild(icon);
             // EXAMPLE:
-            renderedContent = CreateAdaptveCard(HARDCODED_CARD);
+            renderedContent = CreateAdaptveCard(content);
             break;
         default:
             console.log("An error occured while parsing the CHATFIELDTYPE.");
@@ -108,7 +78,8 @@ function CreateChatField(content, type) {
     chatField.appendChild(renderedContent);
     let timeSpan = CreateTimeSpan();
     chatField.appendChild(timeSpan);
-    return chatField;
+    document.getElementById("chat-container").appendChild(chatField);
+    chatField.scrollIntoView();  // to focus the currently added chat field
 }
 
 function CreateTimeSpan() {
