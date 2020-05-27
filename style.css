@@ -30,11 +30,11 @@ body {
 
 .chat-field img {
     float: left;
-    max-width: 60px;
+    max-width: 45px;
     width: 100%;
     margin-right: 20px;
     background-color: white;
-    border-radius: 20%;
+    border-radius: 15%;
 }
 
 .time {

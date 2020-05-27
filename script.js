@@ -1,7 +1,9 @@
 "use strict";
 
 const CHATFIELDTYPES = Object.freeze({ "user": 1, "bot": 2 });
-const BASE = "https://chatbot.escde.net/api/messages";
+const BASE = "/api/messages";
+const HUB = "/receiverhub"
+const CONVERSATION_ID = "1";
 
 const HARDCODED_CARD = {
     "type": "AdaptiveCard",
@@ -29,6 +31,40 @@ const HARDCODED_CARD = {
         }
     ]
 };
+
+const connection = new signalR.HubConnectionBuilder()
+    .withUrl(HUB)
+    .configureLogging(signalR.LogLevel.Information)
+    .build();
+
+async function start() {
+    try {
+        await connection.start();
+        console.log("connected");
+    } catch (err) {
+        console.log(err);
+        setTimeout(() => start(), 5000);
+    }
+};
+
+connection.onclose(async () => {
+    await start();
+});
+
+connection.on(CONVERSATION_ID, () => {
+    alert("ANGEKOMMEN");
+    /*const resp = await fetch(newUrl, {
+        method: 'POST',
+        credentials: 'include',
+        mode: 'cors'
+    });
+    const status = await resp.status;
+    const result = await resp.json();
+    return [status, result];*/
+});
+
+// Start the connection.
+start();
 
 function SetUp() {
     document.getElementById("inputForm").addEventListener("submit", SubmitInput);
