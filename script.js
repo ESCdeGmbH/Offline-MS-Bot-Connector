@@ -1,17 +1,77 @@
 "use strict";
 
-const CHATFIELDTYPES = Object.freeze({ "user": 1, "bot": 2 });
-const BASE = "/api/messages";
-const BASE_OFFLINE = "/v3/conversations/"
-const HUB = "/receiverhub"
-const CONVERSATION_ID = "1";
+let chatfieldTypes = Object.freeze({ "user": 1, "bot": 2 });
+let conversationId;
+let config;
 
-const connection = new signalR.HubConnectionBuilder()
-    .withUrl(HUB)
-    .configureLogging(signalR.LogLevel.Information)
-    .build();
+function InitBot(cfg, botSection) {
+    config = cfg;
+    conversationId = uuid();
+    SetUpBotView(botSection);
+    SetUpSignalR();
+}
 
-async function start() {
+function SetUpBotView(botSection) {
+    let chatContainer = document.createElement("div");
+    chatContainer.id = "chat-container";
+
+    let footer = document.createElement("div");
+    footer.id = "footer";
+
+    let inputForm = document.createElement("form");
+    inputForm.id = "inputForm";
+    inputForm.addEventListener("submit", SubmitInput);
+
+    let inputField = document.createElement("input");
+    inputField.id = "inputField";
+    inputField.name = "inputField";
+    inputField.type = "text";
+    inputField.placeholder = "Stellen Sie hier Ihre Frage";
+
+    let submit = document.createElement("input");
+    submit.type = "submit";
+    submit.id = "submit";
+    submit.value = "&#x2B9E";
+
+    inputForm.appendChild(inputField);
+    inputForm.appendChild(submit);
+    footer.appendChild(inputForm);
+    botSection.appendChild(chatContainer);
+    botSection.appendChild(footer);
+}
+
+function SetUpSignalR() {
+    let connection = config.receiver_hub;
+
+    connection.onclose(async () => {
+        await start(connection);
+    });
+
+    connection.on(conversationId, async () => {
+        const resp = await fetch(config.reply_to + conversationId + "/poll", {
+            method: 'POST'
+        });
+        const status = await resp.status;
+        const result = await resp.json();
+        if (status != 200 || !result || result.length == 0) {
+            Console.log("Error while parsing the response.");
+            return;
+        }
+        switch (result[0].type) {
+            case "message":
+                HandleMessage(result[0].text);
+                break;
+            case "asasdasd":
+                HandleAdaptiveCard(result[0].attachments);
+                break;
+            default: HandleUnknownType();
+        }
+    });
+
+    start(connection);
+}
+
+async function start(connection) {
     try {
         await connection.start();
         console.log("connected");
@@ -21,25 +81,16 @@ async function start() {
     }
 };
 
-connection.onclose(async () => {
-    await start();
-});
-
-connection.on(CONVERSATION_ID, async () => {
-    const resp = await fetch(BASE_OFFLINE + CONVERSATION_ID + "/poll", {
-        method: 'POST'
-    });
-    const status = await resp.status; // TODO: use status to check if result is valid
-    const result = await resp.json();
-    CreateAndAppendChatField(result[0].attachments[0].content, CHATFIELDTYPES.bot);
-});
-
-// Start the connection.
-start();
-
-function SetUp() {
-    document.getElementById("inputForm").addEventListener("submit", SubmitInput);
+function HandleAdaptiveCard(attachments) {
+    for (var at in attachments) {
+        CreateAndAppendChatField(CreateAdaptiveCard(at.content), chatfieldTypes.bot);
+    }
 }
+
+function HandleMessage(text) {
+    CreateAndAppendChatField(CreateText(text), chatfieldTypes.bot);
+}
+
 
 function CreateIcon() {
     let icon = document.createElement("img"); // TODO: Bild und Name etc. per Anfrage an Backend holen...
@@ -51,24 +102,24 @@ function CreateIcon() {
 function SubmitInput(event) {
     let input = document.getElementById("inputField").value;
     document.getElementById("inputField").value = "";
-    CreateAndAppendChatField(input, CHATFIELDTYPES.user);
+    CreateAndAppendChatField(CreateText(input), chatfieldTypes.user);
     event.preventDefault();  // to prevent the page to getting redirected after clicking the submit button or pressing 'Enter'
 }
 
-function CreateAndAppendChatField(content, type) {
+function SendMessageToBot(text) {
+    // TODO
+}
+
+function CreateAndAppendChatField(renderedContent, type) {
     let chatFieldClass = "chat-field";
     let chatField = document.createElement("div");
-    let renderedContent;
     switch (type) {
-        case CHATFIELDTYPES.user:
+        case chatfieldTypes.user:
             chatFieldClass += " darker right";
-            renderedContent = CreateText(content);
             break;
-        case CHATFIELDTYPES.bot:
+        case chatfieldTypes.bot:
             let icon = CreateIcon();
             chatField.appendChild(icon);
-            // EXAMPLE:
-            renderedContent = CreateAdaptveCard(content);
             break;
         default:
             console.log("An error occured while parsing the CHATFIELDTYPE.");
@@ -107,14 +158,21 @@ function CreateText(content) {
 
 function CreateAdaptveCard(content) {
     let adaptiveCard = new AdaptiveCards.AdaptiveCard();
-    adaptiveCard.hostConfig = new AdaptiveCards.HostConfig({
+    adaptiveCard.hostconfig = new AdaptiveCards.Hostconfig({
         fontFamily: document.body.fontFamily
         // More host config options
     });
     adaptiveCard.onExecuteAction = function (action) {
-        let chatField = CreateChatField(action.text, CHATFIELDTYPES.user); // TODO Variable Text prüfen
+        let chatField = CreateChatField(action.text, chatfieldTypes.user); // TODO Variable Text prüfen
         document.getElementById("chat-container").appendChild(chatField);
     }
     adaptiveCard.parse(content);
     return adaptiveCard.render();
+}
+
+function uuid() {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+        var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+        return v.toString(16);
+    });
 }

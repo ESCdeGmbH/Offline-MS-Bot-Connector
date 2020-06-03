@@ -39,7 +39,7 @@ body {
 
 .time {
     float: right;
-    color: #aaa;    
+    color: #aaa;
     font-size: 0.7em;
 }
 
@@ -53,12 +53,13 @@ body {
 /*begin: hide inner scrollbar*/
 #chat-container {
     scrollbar-width: none; /* Firefox */
-    -ms-overflow-style: none;  /* Internet Explorer 10+ */
+    -ms-overflow-style: none; /* Internet Explorer 10+ */
 }
-#chat-container::-webkit-scrollbar { /* WebKit */
-    width: 0;
-    height: 0;
-}
+
+    #chat-container::-webkit-scrollbar { /* WebKit */
+        width: 0;
+        height: 0;
+    }
 /*end: hide inner scrollbar*/
 
 #footer {
@@ -79,11 +80,4 @@ body {
 
 #submit {
     float: right;
-}
-
-#version {
-    clear: both;
-    text-align: right;
-    font-size: 0.5em;
-    color: gray;
 }

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 
 <head>
@@ -10,40 +10,24 @@
     <script src="script.js"></script>
 </head>
 
-<body onLoad="SetUp();">
-    <section id="chat-container">
-        <div class="chat-field">
-            <img src="ESC.png" alt="ESC-Avatar">
-            <p class="txt">Hello. How are you today?</p>
-            <span class="time">11:00:00</span>
-        </div>
+<body>
+    <section id="bot"></section>
 
-        <div class="chat-field darker right">
-            <p class="txt">Hey! I'm fine. Thanks for asking!</p>
-            <span class="time">11:01:00</span>
-        </div>
-
-        <div class="chat-field">
-            <img src="ESC.png" alt="ESC-Avatar">
-            <p class="txt">Sweet! So, what do you wanna do today?</p>
-            <span class="time">11:02:00</span>
-        </div>
-
-        <div class="chat-field darker right">
-            <p class="txt">Nah, I dunno. Play soccer.. or learn more coding perhaps?</p>
-            <span class="time">11:05:00</span>
-        </div>
-    </section>
-
-    <section id="footer">
-        <form id="inputForm" action="javascript:SubmitInput();">
-            <input type="text" id="inputField" name="inputField" placeholder="Stellen Sie hier Ihre Frage">
-            <input type="submit" id="submit" value="&#x2B9E">
-        </form>
-        <div id="version">
-            Version 0.0.0 (pre-alpha)
-        </div>
-    </section>
+    <script>
+        const connection = new signalR.HubConnectionBuilder()
+            .withUrl("/receiverhub")
+            .configureLogging(signalR.LogLevel.Information)
+            .build();
+        let id = uuid();
+        let botConfig = Object.freeze({
+            "user": id,
+            "message_backend": "/api/messages",
+            "reply_to": "/v3/conversations/",
+            "receiver_hub": connection
+        });
+        InitBot(botConfig, document.getElementById("bot"));
+        console.log(conversationId);
+    </script>
 </body>
 
 </html>
