@@ -18,15 +18,16 @@
             .withUrl("/receiverhub")
             .configureLogging(signalR.LogLevel.Information)
             .build();
-        let id = uuid();
+        let user_id = uuid();
         let botConfig = Object.freeze({
-            "user": id,
+            "user": user_id,
             "message_backend": "/api/messages",
             "reply_to": "/v3/conversations/",
-            "receiver_hub": connection
+            "receiver_hub": connection,
+            "bot_avatar": "/bot_avatar.png",            
+            "bot_avatar_alt": "ESC"
         });
         InitBot(botConfig, document.getElementById("bot"));
-        console.log(conversationId);
     </script>
 </body>
 

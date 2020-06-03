@@ -7,6 +7,7 @@ let config;
 function InitBot(cfg, botSection) {
     config = cfg;
     conversationId = uuid();
+    console.log("Conversation ID: " + conversationId);
     SetUpBotView(botSection);
     SetUpSignalR();
 }
@@ -31,7 +32,7 @@ function SetUpBotView(botSection) {
     let submit = document.createElement("input");
     submit.type = "submit";
     submit.id = "submit";
-    submit.value = "&#x2B9E";
+    submit.value = "\u2B9E";
 
     inputForm.appendChild(inputField);
     inputForm.appendChild(submit);
@@ -94,8 +95,8 @@ function HandleMessage(text) {
 
 function CreateIcon() {
     let icon = document.createElement("img"); // TODO: Bild und Name etc. per Anfrage an Backend holen...
-    icon.src = "ESC.png";
-    icon.alt = "ESC-Avatar";
+    icon.src = config.bot_avatar;
+    icon.alt = config.bot_avatar_alt;
     return icon;
 }
 
