@@ -48,8 +48,14 @@ function SetUpBotView(botSection) {
     let header = document.createElement("div");
     header.id = "header";
     header.style.cursor = "move";
-    header.innerText = "ESC-Chatbot";
 
+    let title = document.createElement("p");
+    title.id = "title";
+    title.innerText = config.bot_title;
+
+    
+    header.appendChild(CreateIcon());
+    header.appendChild(title);
     inputForm.appendChild(inputField);
     inputForm.appendChild(submit);
     footer.appendChild(inputForm);
@@ -159,18 +165,7 @@ async function SendMessageToBot(text) {
 function CreateAndAppendChatField(renderedContent, type) {
     let chatFieldClass = "chat-field";
     let chatField = document.createElement("div");
-    switch (type) {
-        case chatfieldTypes.user:
-            chatFieldClass += " darker right";
-            break;
-        case chatfieldTypes.bot:
-            let icon = CreateIcon();
-            chatField.appendChild(icon);
-            break;
-        default:
-            console.log("An error occured while parsing the CHATFIELDTYPE.");
-            return;
-    }
+    if (type == chatfieldTypes.user) chatFieldClass += " darker right";
     chatField.className = chatFieldClass;
     chatField.appendChild(renderedContent);
     let timeSpan = CreateTimeSpan();
