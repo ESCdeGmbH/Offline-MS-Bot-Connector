@@ -119,9 +119,14 @@
 
 /*format adaptive cards*/
 .ac-actionSet {
-    flex-wrap: wrap;
+    flex-wrap: wrap !important;
 }
 
 .ac-container, .ac-adaptiveCard {
     background-color: transparent !important;
+    padding: 0 !important;
+}
+
+.ac-horizontal-separator {
+    height: 10px !important;
 }

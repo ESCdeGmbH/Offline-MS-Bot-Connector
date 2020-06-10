@@ -223,7 +223,9 @@ function LoadExistingDialog() {
         console.log("No chat cached in session storage.");
         return;
     }
-    document.getElementById("chat-container").innerHTML = chat;
+    let chatContainer = document.getElementById("chat-container");
+    chatContainer.innerHTML = chat.ReplaceAll(/<button.*>/gm, "");
+    chatContainer.lastChild.scrollIntoView();
 }
 
 function uuid() {
@@ -268,3 +270,7 @@ function MakeBotDraggable(botSection, header) {
         document.onmousemove = null;
     }
 }
+
+String.prototype.ReplaceAll = function (search, replacement) {
+    return this.split(search).join(replacement);
+};
