@@ -9,7 +9,11 @@ let config;
 
 function InitBot(cfg, botSection) {
     config = cfg;
-    conversationId = uuid();
+    conversationId = sessionStorage.getItem("conversation_id");
+    if (!conversationId) {
+        conversationId = uuid();
+        sessionStorage.setItem("conversation_id", conversationId);
+    }
     console.log("Conversation ID: " + conversationId);
     require(["https://unpkg.com/adaptivecards/dist/adaptivecards.js", "https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/3.1.3/signalr.min.js"], function (module_ac, module_sr) {
         ac = module_ac;
@@ -46,6 +50,8 @@ function SetUpBotView(botSection) {
     footer.appendChild(inputForm);
     botSection.appendChild(chatContainer);
     botSection.appendChild(footer);
+    
+    LoadExistingDialog();
 }
 
 function SetUpSignalR() {
@@ -163,6 +169,9 @@ function CreateAndAppendChatField(renderedContent, type) {
     chatField.appendChild(timeSpan);
     document.getElementById("chat-container").appendChild(chatField);
     chatField.scrollIntoView();  // to focus the currently added chat field
+
+
+    StoreDialog();
 }
 
 function CreateTimeSpan() {
@@ -201,6 +210,19 @@ function CreateAdaptiveCard(content) {
     }
     adaptiveCard.parse(content);
     return adaptiveCard.render();
+}
+
+function StoreDialog() {
+    sessionStorage.setItem("chat", document.getElementById("chat-container").innerHTML);
+}
+
+function LoadExistingDialog() {
+    let chat = sessionStorage.getItem("chat");
+    if (!chat) {
+        console.log("No chat cached in session storage.");
+        return;
+    }
+    document.getElementById("chat-container").innerHTML = chat;
 }
 
 function uuid() {
