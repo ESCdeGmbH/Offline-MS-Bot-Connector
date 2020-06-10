@@ -133,3 +133,8 @@
 .ac-horizontal-separator {
     height: 10px !important;
 }
+
+button div {
+    white-space: initial !important;
+    text-overflow: initial !important;
+}
