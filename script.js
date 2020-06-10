@@ -126,7 +126,7 @@ function SubmitInput(event) {
 
 async function SendMessageToBot(text) {
     let payload = {
-        "channelId": "ESC_Offline_Connector",
+        "channelId": config.host,
         "conversation": {
             "id": conversationId
         },
@@ -169,7 +169,6 @@ function CreateAndAppendChatField(renderedContent, type) {
     chatField.appendChild(timeSpan);
     document.getElementById("chat-container").appendChild(chatField);
     chatField.scrollIntoView();  // to focus the currently added chat field
-
 
     StoreDialog();
 }
