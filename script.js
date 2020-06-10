@@ -205,8 +205,7 @@ function SubmitACInput(text) {
 function CreateAdaptiveCard(content) {
     let adaptiveCard = new ac.AdaptiveCard();
     adaptiveCard.onExecuteAction = function (action) {
-        let chatField = SubmitACInput(action.title);
-        document.getElementById("chat-container").appendChild(chatField);
+        SubmitACInput(action.title);
     }
     adaptiveCard.parse(content);
     return adaptiveCard.render();
