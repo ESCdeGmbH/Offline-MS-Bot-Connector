@@ -168,7 +168,7 @@ function CreateAndAppendChatField(renderedContent, type) {
     if (type == chatfieldTypes.user) chatFieldClass += " darker right";
     chatField.className = chatFieldClass;
     chatField.appendChild(renderedContent);
-    let timeSpan = CreateTimeSpan();
+    let timeSpan = CreateTimeSpan(type);
     chatField.appendChild(timeSpan);
     document.getElementById("chat-container").appendChild(chatField);
     chatField.scrollIntoView();  // to focus the currently added chat field
@@ -176,9 +176,13 @@ function CreateAndAppendChatField(renderedContent, type) {
     StoreDialog();
 }
 
-function CreateTimeSpan() {
+function CreateTimeSpan(type) {
     let timeSpan = document.createElement("span");
-    timeSpan.className = "time";
+    if (type == chatfieldTypes.bot) {
+        timeSpan.className = "time left";
+    } else {
+        timeSpan.className = "time right";
+    }
     timeSpan.innerText = ParseTime();
     return timeSpan;
 }
