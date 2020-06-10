@@ -45,13 +45,21 @@ function SetUpBotView(botSection) {
     submit.id = "submit";
     submit.value = "\u2B9E";
 
+    let header = document.createElement("div");
+    header.id = "header";
+    header.style.cursor = "move";
+    header.innerText = "ESC-Chatbot";
+
     inputForm.appendChild(inputField);
     inputForm.appendChild(submit);
     footer.appendChild(inputForm);
+
+    botSection.appendChild(header);
     botSection.appendChild(chatContainer);
     botSection.appendChild(footer);
     
     LoadExistingDialog();
+    MakeBotDraggable(botSection, header);
 }
 
 function SetUpSignalR() {
@@ -228,4 +236,40 @@ function uuid() {
         var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
         return v.toString(16);
     });
+}
+
+function MakeBotDraggable(botSection, header) {
+    var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+
+    header.onmousedown = DragMouseDown;
+
+    function DragMouseDown(e) {
+        e = e || window.event;
+        e.preventDefault();
+        // get the mouse cursor position at startup:
+        pos3 = e.clientX;
+        pos4 = e.clientY;
+        document.onmouseup = CloseDragElement;
+        // call a function whenever the cursor moves:
+        document.onmousemove = ElementDrag;
+    }
+
+    function ElementDrag(e) {
+        e = e || window.event;
+        e.preventDefault();
+        // calculate the new cursor position:
+        pos1 = pos3 - e.clientX;
+        pos2 = pos4 - e.clientY;
+        pos3 = e.clientX;
+        pos4 = e.clientY;
+        // set the element's new position:
+        botSection.style.top = (botSection.offsetTop - pos2) + "px";
+        botSection.style.left = (botSection.offsetLeft - pos1) + "px";
+    }
+
+    function CloseDragElement() {
+        /* stop moving when mouse button is released:*/
+        document.onmouseup = null;
+        document.onmousemove = null;
+    }
 }
