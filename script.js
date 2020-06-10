@@ -207,7 +207,16 @@ function SubmitACInput(text) {
 function CreateAdaptiveCard(content) {
     let adaptiveCard = new ac.AdaptiveCard();
     adaptiveCard.onExecuteAction = function (action) {
-        SubmitACInput(action.title);
+        switch (action.parent.constructor.name) {
+            case "TextInput":
+                SubmitACInput(action.parent.value);
+                break;
+            case "AdaptiveCard":
+                SubmitACInput(action.data);
+                break;
+            default:
+                console.error("Unknown action type.");
+        }
     }
     adaptiveCard.parse(content);
     return adaptiveCard.render();
