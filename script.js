@@ -230,8 +230,6 @@ function CreateAdaptiveCard(content) {
                     SubmitACInput(action.data, fieldTypes.value);
                 break;
             case "OpenUrlAction":
-                CreateAndAppendChatField(CreateText(action.title), chatfieldTypes.user);
-                CreateAndAppendChatField(CreateText("Okay, ich &ouml;ffne die Seite in einem neuen Browsertab."), chatfieldTypes.bot);
                 window.open(action.url, "_blank");
                 break;
             default:
