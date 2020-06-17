@@ -210,7 +210,7 @@ function AddLeadingZero(number) {
 function CreateText(content) {
     let paragraph = document.createElement("p");
     paragraph.className = "txt";
-    paragraph.innerText = content;
+    paragraph.innerHTML = content;
     return paragraph;
 }
 
@@ -222,12 +222,17 @@ function SubmitACInput(data, fieldtype, text) {
 function CreateAdaptiveCard(content) {
     let adaptiveCard = new ac.AdaptiveCard();
     adaptiveCard.onExecuteAction = function (action) {
-        switch (action.parent.constructor.name) {
-            case "TextInput":
-                SubmitACInput(action.data, fieldTypes.value);
+        switch (action.constructor.name) {
+            case "SubmitAction":
+                if (typeof action.data === 'string' || action.data instanceof String)
+                    SubmitACInput(action.data, fieldTypes.text, action.data);
+                else
+                    SubmitACInput(action.data, fieldTypes.value);
                 break;
-            case "AdaptiveCard":
-                SubmitACInput(action.data, fieldTypes.text, action.data);
+            case "OpenUrlAction":
+                CreateAndAppendChatField(CreateText(action.title), chatfieldTypes.user);
+                CreateAndAppendChatField(CreateText("Okay, ich &ouml;ffne die Seite in einem neuen Browsertab."), chatfieldTypes.bot);
+                window.open(action.url, "_blank");
                 break;
             default:
                 console.error("Unknown action type.");
