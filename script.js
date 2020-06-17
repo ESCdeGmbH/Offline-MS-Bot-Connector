@@ -4,6 +4,7 @@ var ac;
 var sr;
 
 let chatfieldTypes = Object.freeze({ "user": 1, "bot": 2 });
+let fieldTypes = Object.freeze({ "text": "text", "value": "value" });
 let conversationId;
 let config;
 
@@ -53,7 +54,7 @@ function SetUpBotView(botSection) {
     title.id = "title";
     title.innerText = config.bot_title;
 
-    
+
     header.appendChild(CreateIcon());
     header.appendChild(title);
     inputForm.appendChild(inputField);
@@ -63,7 +64,7 @@ function SetUpBotView(botSection) {
     botSection.appendChild(header);
     botSection.appendChild(chatContainer);
     botSection.appendChild(footer);
-    
+
     LoadExistingDialog();
     MakeBotDraggable(botSection, header);
 }
@@ -135,10 +136,10 @@ function SubmitInput(event) {
     document.getElementById("inputField").value = "";
     CreateAndAppendChatField(CreateText(input), chatfieldTypes.user);
     event.preventDefault();  // to prevent the page to getting redirected after clicking the submit button or pressing 'Enter'
-    SendMessageToBot(input);
+    SendMessageToBot(input, fieldTypes.text);
 }
 
-async function SendMessageToBot(text) {
+async function SendMessageToBot(data, fieldtype) {
     let payload = {
         "channelId": config.host,
         "conversation": {
@@ -149,9 +150,9 @@ async function SendMessageToBot(text) {
         },
         "id": uuid(),
         "serviceUrl": config.reply_to,
-        "text": text,
         "type": "message"
     }
+    payload[fieldtype] = data;
     const resp = await fetch(config.message_backend, {
         method: 'POST',
         body: JSON.stringify(payload)
@@ -212,9 +213,9 @@ function CreateText(content) {
     return paragraph;
 }
 
-function SubmitACInput(text) {
-    CreateAndAppendChatField(CreateText(text), chatfieldTypes.user);
-    SendMessageToBot(text);
+function SubmitACInput(data, fieldtype, text) {
+    if (text) CreateAndAppendChatField(CreateText(text), chatfieldTypes.user);
+    SendMessageToBot(data, fieldtype);
 }
 
 function CreateAdaptiveCard(content) {
@@ -222,10 +223,10 @@ function CreateAdaptiveCard(content) {
     adaptiveCard.onExecuteAction = function (action) {
         switch (action.parent.constructor.name) {
             case "TextInput":
-                SubmitACInput(action.parent.value);
+                SubmitACInput(action.data, fieldTypes.value);
                 break;
             case "AdaptiveCard":
-                SubmitACInput(action.data);
+                SubmitACInput(action.data, fieldTypes.text, action.data);
                 break;
             default:
                 console.error("Unknown action type.");
