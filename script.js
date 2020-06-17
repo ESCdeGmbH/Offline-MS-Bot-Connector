@@ -162,6 +162,15 @@ async function SendMessageToBot(text) {
     }
 }
 
+function ChangeUserId(id) {
+    if (id) {
+        config.user_id = id;
+    } else {
+        config.user_id = uuid();
+    }
+    return config.user_id;
+}
+
 function CreateAndAppendChatField(renderedContent, type) {
     let chatFieldClass = "chat-field";
     let chatField = document.createElement("div");
