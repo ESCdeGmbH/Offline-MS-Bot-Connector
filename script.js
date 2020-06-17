@@ -133,6 +133,7 @@ function CreateIcon() {
 
 function SubmitInput(event) {
     let input = document.getElementById("inputField").value;
+    if (!input) return;
     document.getElementById("inputField").value = "";
     CreateAndAppendChatField(CreateText(input), chatfieldTypes.user);
     event.preventDefault();  // to prevent the page to getting redirected after clicking the submit button or pressing 'Enter'
