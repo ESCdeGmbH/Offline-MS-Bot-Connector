@@ -279,6 +279,8 @@ function MakeBotDraggable(botSection, header) {
     }
 
     function ElementDrag(e) {
+        let maxWidth = window.innerWidth - botSection.offsetWidth;
+        let maxHeight = window.innerHeight;
         e = e || window.event;
         e.preventDefault();
         // calculate the new cursor position:
@@ -287,8 +289,12 @@ function MakeBotDraggable(botSection, header) {
         pos3 = e.clientX;
         pos4 = e.clientY;
         // set the element's new position:
-        botSection.style.top = (botSection.offsetTop - pos2) + "px";
-        botSection.style.left = (botSection.offsetLeft - pos1) + "px";
+        let top = botSection.offsetTop - pos2;
+        let left = botSection.offsetLeft - pos1;
+        top = top < maxHeight ? (top < 0 ? 0 : top) : maxHeight;
+        left = left < maxWidth ? (left < 0 ? 0 : left) : maxWidth;
+        botSection.style.top = top + "px";
+        botSection.style.left = left + "px";
     }
 
     function CloseDragElement() {
