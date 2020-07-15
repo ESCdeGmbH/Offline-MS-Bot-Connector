@@ -12,10 +12,12 @@ function InitBot(cfg, botSection) {
     botSection.style.top = sessionStorage.getItem("top");
     botSection.style.left = sessionStorage.getItem("left");
     config = cfg;
-    conversationId = getCookie("conversation_id");
+    conversationId = sessionStorage.getItem("conversation_id");
+    //conversationId = getCookie("conversation_id"); // works in ticketsystem but not here (maybe due to localhost)
     if (!conversationId) {
         conversationId = uuid();
-        setCookie("conversation_id", conversationId);
+        sessionStorage.setItem("conversation_id", conversationId);
+        //setCookie("conversation_id", conversationId);
     }
     console.log("Conversation ID: " + conversationId);
     require(["https://unpkg.com/adaptivecards/dist/adaptivecards.js", "https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/3.1.3/signalr.min.js"], function (module_ac, module_sr) {
