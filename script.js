@@ -9,11 +9,13 @@ let conversationId;
 let config;
 
 function InitBot(cfg, botSection) {
+    botSection.style.top = sessionStorage.getItem("top");
+    botSection.style.left = sessionStorage.getItem("left");
     config = cfg;
-    conversationId = sessionStorage.getItem("conversation_id");
+    conversationId = getCookie("conversation_id");
     if (!conversationId) {
         conversationId = uuid();
-        sessionStorage.setItem("conversation_id", conversationId);
+        setCookie("conversation_id", conversationId);
     }
     console.log("Conversation ID: " + conversationId);
     require(["https://unpkg.com/adaptivecards/dist/adaptivecards.js", "https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/3.1.3/signalr.min.js"], function (module_ac, module_sr) {
@@ -33,7 +35,7 @@ function SetUpBotView(botSection) {
     chatContainer.id = "chat-container";
 
     footer = document.createElement("div");
-    footer.id = "chat-footer";
+    footer.id = "chatbot-footer";
 
     inputForm = document.createElement("form");
     inputForm.id = "inputForm";
@@ -51,7 +53,7 @@ function SetUpBotView(botSection) {
     submit.value = "\u2B9E";
 
     header = document.createElement("div");
-    header.id = "chat-header";
+    header.id = "chatbot-header";
     header.style.cursor = "move";
 
     let title = document.createElement("p");
@@ -319,6 +321,8 @@ function MakeBotDraggable(botSection, header) {
         left = left < maxWidth ? (left < 0 ? 0 : left) : maxWidth;
         botSection.style.top = top + "px";
         botSection.style.left = left + "px";
+        sessionStorage.setItem("top", top + "px");
+        sessionStorage.setItem("left", left + "px");
     }
 
     function CloseDragElement() {
@@ -327,11 +331,6 @@ function MakeBotDraggable(botSection, header) {
         document.onmousemove = null;
     }
 }
-
-String.prototype.ReplaceAll = function (search, replacement) {
-    return this.split(search).join(replacement);
-};
-
 
 let open = true;
 
@@ -352,4 +351,46 @@ function OpenCloseChat() {
         bot.style.border = "";
         document.getElementById('help').innerHTML = "Chat minimieren";
     }
+}
+
+String.prototype.ReplaceAll = function (search, replacement) {
+    return this.split(search).join(replacement);
+};
+
+function getDomain() {
+    var separate = (document.domain).split('.');
+    separate.shift();
+    return "." + separate.join('.');
+}
+
+function getCookie(name) {
+    let matches = document.cookie.match(new RegExp(
+        "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
+    ));
+    return matches ? decodeURIComponent(matches[1]) : undefined;
+}
+
+function setCookie(name, value, options = {}) {
+    options = {
+        path: '/',
+        domain: getDomain(),
+        // add other defaults here if necessary
+        ...options
+    };
+
+    if (options.expires instanceof Date) {
+        options.expires = options.expires.toUTCString();
+    }
+
+    let updatedCookie = encodeURIComponent(name) + "=" + encodeURIComponent(value);
+
+    for (let optionKey in options) {
+        updatedCookie += "; " + optionKey;
+        let optionValue = options[optionKey];
+        if (optionValue !== true) {
+            updatedCookie += "=" + optionValue;
+        }
+    }
+
+    document.cookie = updatedCookie;
 }
