@@ -14,7 +14,6 @@
     display: grid;
     grid-template-columns: 30px 90%;
     align-items: center;
-    z-index: 100;
 }
 
     #chatbot-header img {
@@ -33,6 +32,8 @@
     border-radius: 5px;
     background-color: white;
     padding: 10px;
+    width: 30%;
+    z-index: 100;
     resize: horizontal;
     min-width: 250px;
 }
