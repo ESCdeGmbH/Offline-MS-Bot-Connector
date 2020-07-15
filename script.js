@@ -24,14 +24,18 @@ function InitBot(cfg, botSection) {
     });
 }
 
+let footer;
+let inputForm;
+let header;
+
 function SetUpBotView(botSection) {
     let chatContainer = document.createElement("div");
     chatContainer.id = "chat-container";
 
-    let footer = document.createElement("div");
-    footer.id = "footer";
+    footer = document.createElement("div");
+    footer.id = "chat-footer";
 
-    let inputForm = document.createElement("form");
+    inputForm = document.createElement("form");
     inputForm.id = "inputForm";
     inputForm.addEventListener("submit", SubmitInput);
 
@@ -46,15 +50,34 @@ function SetUpBotView(botSection) {
     submit.id = "submit";
     submit.value = "\u2B9E";
 
-    let header = document.createElement("div");
-    header.id = "header";
+    header = document.createElement("div");
+    header.id = "chat-header";
     header.style.cursor = "move";
 
     let title = document.createElement("p");
     title.id = "title";
     title.innerText = config.bot_title;
 
+    let chatCtrl = document.createElement("div");
+    chatCtrl.id = "chatCtrl";
 
+    let collapsebtn = document.createElement("button");
+    collapsebtn.id = "collapsebtn";
+    collapsebtn.onclick = OpenCloseChat;
+
+    let opencloseimg = document.createElement("img");
+    opencloseimg.id = "opencloseimg";
+    opencloseimg.src = config.chat_icon;
+
+    let help = document.createElement("span");
+    help.id = "help";
+    help.innerHTML = "Chat minimieren";
+
+
+    collapsebtn.appendChild(opencloseimg);
+    collapsebtn.appendChild(help);
+    chatCtrl.appendChild(collapsebtn);
+ 
     header.appendChild(CreateIcon());
     header.appendChild(title);
     inputForm.appendChild(inputField);
@@ -64,6 +87,7 @@ function SetUpBotView(botSection) {
     botSection.appendChild(header);
     botSection.appendChild(chatContainer);
     botSection.appendChild(footer);
+    botSection.appendChild(chatCtrl);
 
     LoadExistingDialog();
     MakeBotDraggable(botSection, header);
@@ -307,3 +331,25 @@ function MakeBotDraggable(botSection, header) {
 String.prototype.ReplaceAll = function (search, replacement) {
     return this.split(search).join(replacement);
 };
+
+
+let open = true;
+
+function OpenCloseChat() {
+    let bot = document.getElementById("bot");
+    if (open) {
+        open = false;
+        footer.style.display = "none";
+        header.style.display = "none";
+        inputForm.style.display = "none";
+        bot.style.border = "none";
+        document.getElementById('help').innerHTML = "Ben&ouml;tigen Sie Hilfe?";
+    } else {
+        open = true;
+        footer.style.display = "";
+        header.style.display = "";
+        inputForm.style.display = "";
+        bot.style.border = "";
+        document.getElementById('help').innerHTML = "Chat minimieren";
+    }
+}

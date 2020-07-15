@@ -4,7 +4,7 @@
     word-break: break-word;
 }
 
-#header {
+#chat-header {
     overflow: hidden;
     cursor: move;
     padding-bottom: 10px;
@@ -16,11 +16,11 @@
     align-items: center;
 }
 
-    #header img {
+    #chat-header img {
         width: 100%;
     }
 
-    #header #title {
+    #chat-header #title {
         text-align: center;
         margin: 0;
     }
@@ -97,7 +97,7 @@
     }
 /*end: hide inner scrollbar*/
 
-#footer {
+#chat-footer {
     position: relative;
     padding-top: 10px;
     background-color: white;
@@ -137,4 +137,38 @@
 button div {
     white-space: initial !important;
     text-overflow: initial !important;
+}
+
+#collapsebtn {
+    cursor: pointer;
+    padding: 2px;
+    margin: 0 auto;
+    width: auto;
+    outline: none;
+    text-align: center;
+    -webkit-transition-duration: 0.4s; /* Safari */
+    transition-duration: 0.4s;
+    background-color: white;
+    border: none;
+}
+
+    #collapsebtn:hover {
+        filter: opacity(60%);
+    }
+
+#opencloseimg {
+    cursor: pointer;
+    width: 30px;
+    height: 30px;
+    vertical-align: middle;
+}
+
+#help {
+    margin: 2px;
+    padding: 2px;
+}
+
+#chatCtrl {
+    margin-top: 5px;
+    text-align: center;
 }
