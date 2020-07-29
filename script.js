@@ -14,6 +14,12 @@ let config;
 
 var bot_open;
 
+
+//////////////////////////////////////////////////////////////////////////////////
+///////////////////////// PUBLIC ENTRY FUNCTIONS /////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
+
+// Connect & Initialize Bot by Configuration and Bot-Element
 function InitBot(cfg, botSection) {
     botSection.style.top = sessionStorage.getItem("top");
     botSection.style.left = sessionStorage.getItem("left");
@@ -42,6 +48,43 @@ function InitBot(cfg, botSection) {
     });
 }
 
+// Change the User ID (if null use #uuid())
+function ChangeUserId(id) {
+    if (id) {
+        config.user_id = id;
+    } else {
+        config.user_id = uuid();
+    }
+    return config.user_id;
+}
+
+// Get a uuid string
+function uuid() {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+        var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+        return v.toString(16);
+    });
+}
+
+// Toggle open / close chat window
+function OpenCloseChat() {
+    let bot = document.getElementById("bot");
+    if (bot_open) {
+        bot_open = 0;
+        sessionStorage.setItem("bot_open", bot_open);
+        bot.style.display = "none";
+        document.getElementById('help').innerHTML = "Ben&ouml;tigen Sie Hilfe?";
+    } else {
+        bot_open = 1;
+        sessionStorage.setItem("bot_open", bot_open);
+        bot.style.display = "";
+        document.getElementById('help').innerHTML = "Chat minimieren";
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////////
+//////////////////////// PRIVATE HELPER FUNCTIONS ////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
 function SetUpBotView(botSection) {
     let chatContainer = document.createElement("div");
     chatContainer.id = "chat-container";
@@ -188,14 +231,7 @@ async function SendMessageToBot(data, fieldtype) {
     }
 }
 
-function ChangeUserId(id) {
-    if (id) {
-        config.user_id = id;
-    } else {
-        config.user_id = uuid();
-    }
-    return config.user_id;
-}
+
 
 function CreateAndAppendChatField(renderedContent, type) {
     let chatFieldClass = "chat-field";
@@ -279,12 +315,7 @@ function LoadExistingDialog() {
     chatContainer.lastChild.scrollIntoView();
 }
 
-function uuid() {
-    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-        var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
-        return v.toString(16);
-    });
-}
+
 
 function MakeBotDraggable(botSection, header) {
     var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
@@ -330,20 +361,7 @@ function MakeBotDraggable(botSection, header) {
     }
 }
 
-function OpenCloseChat() {
-    let bot = document.getElementById("bot");
-    if (bot_open) {
-        bot_open = 0;
-        sessionStorage.setItem("bot_open", bot_open);
-        bot.style.display = "none";
-        document.getElementById('help').innerHTML = "Ben&ouml;tigen Sie Hilfe?";
-    } else {
-        bot_open = 1;
-        sessionStorage.setItem("bot_open", bot_open);
-        bot.style.display = "";
-        document.getElementById('help').innerHTML = "Chat minimieren";
-    }
-}
+
 
 String.prototype.ReplaceAll = function (search, replacement) {
     return this.split(search).join(replacement);
