@@ -3,10 +3,7 @@
 
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="style.css" />
-    <script src="https://unpkg.com/requirejs/require.js"></script>
-    <script src="script.js"></script>
+    <title>ESC-Chatbot (Sample)</title>
 </head>
 
 <body>
@@ -38,9 +35,9 @@
         <script>
             let help = document.getElementById("help");
             if (!Number(sessionStorage.getItem("open"))) {
-                help.innerHTML = "Ben&ouml;tigen Sie Hilfe?";
+                help.innerHTML = "Do you need help?";
             } else {
-                help.innerHTML = "Chat minimieren";
+                help.innerHTML = "Minimize chat";
             }
         </script>
     </section>

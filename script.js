@@ -28,7 +28,7 @@ function InitBot(cfg, botSection) {
         conversationId = sessionStorage.getItem("conversation_id");
     }
     else {
-        conversationId = getCookie("conversation_id"); // works in ticketsystem but not here (maybe due to localhost)
+        conversationId = getCookie("conversation_id");
     }
     if (!conversationId) {
         conversationId = uuid();
@@ -73,12 +73,12 @@ function OpenCloseChat() {
         bot_open = 0;
         sessionStorage.setItem("bot_open", bot_open);
         bot.style.display = "none";
-        document.getElementById('help').innerHTML = "Ben&ouml;tigen Sie Hilfe?";
+        document.getElementById('help').innerHTML = "Do you need help?";
     } else {
         bot_open = 1;
         sessionStorage.setItem("bot_open", bot_open);
         bot.style.display = "";
-        document.getElementById('help').innerHTML = "Chat minimieren";
+        document.getElementById('help').innerHTML = "Minimize chat";
     }
 }
 
