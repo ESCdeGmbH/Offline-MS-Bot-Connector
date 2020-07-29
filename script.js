@@ -8,7 +8,7 @@ let fieldTypes = Object.freeze({ "text": "text", "value": "value" });
 let conversationId;
 let config;
 
-var open;
+var bot_open;
 
 function InitBot(cfg, botSection) {
     botSection.style.top = sessionStorage.getItem("top");
@@ -70,11 +70,11 @@ function SetUpBotView(botSection) {
     botSection.appendChild(chatContainer);
     botSection.appendChild(footer);
 
-    open = Number(sessionStorage.getItem("open"));
-    if (!open) {
+    bot_open = Number(sessionStorage.getItem("bot_open"));
+    if (!bot_open) {
         botSection.style.display = "none";
-        open = 0;
-        sessionStorage.setItem("open", open);
+        bot_open = 0;
+        sessionStorage.setItem("bot_open", bot_open);
     }
 
     LoadExistingDialog();
@@ -320,14 +320,14 @@ function MakeBotDraggable(botSection, header) {
 
 function OpenCloseChat() {
     let bot = document.getElementById("bot");
-    if (open) {
-        open = 0;
-        sessionStorage.setItem("open", open);
+    if (bot_open) {
+        bot_open = 0;
+        sessionStorage.setItem("bot_open", bot_open);
         bot.style.display = "none";
         document.getElementById('help').innerHTML = "Ben&ouml;tigen Sie Hilfe?";
     } else {
-        open = 1;
-        sessionStorage.setItem("open", open);
+        bot_open = 1;
+        sessionStorage.setItem("bot_open", bot_open);
         bot.style.display = "";
         document.getElementById('help').innerHTML = "Chat minimieren";
     }
