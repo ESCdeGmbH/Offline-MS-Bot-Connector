@@ -13,16 +13,17 @@
     <section id="bot"></section>
 
     <script>
-        let user_id = uuid();
+        let user_id = uuid(); // Obtain a user id from somewhere .. here generate unique uuid ..
         let botConfig = Object.freeze({
-            "user_id": user_id,
-            "message_backend": "/api/messages",
-            "reply_to": document.baseURI,
-            "receiver_hub": "/receiverhub",
-            "bot_avatar": "/bot_avatar.png",            
-            "bot_avatar_alt": "ESC"
+            "user_id": user_id, // The ID of the user .. can also set via #ChangeUserId(id)
+            "message_backend": "/api/messages", // The bot backend url (with "/api/messages") . may be relative or absolute
+            "reply_to": document.baseURI, // The Reply to URL for the Backend. Iff you are using the Chatbot Framework of the ESC this might be the Bot itself.
+            "receiver_hub": "/receiverhub", // The Location of the SignalR receiverhub for registration (this might be the chatbot backend itself iff you are using the ESC Chatbot Framework)
+            "bot_avatar": "/bot_avatar.png", // Path to the Avatar Image of the Chatbot           
+            "bot_avatar_alt": "ESC", // The alternative (text) for the Chatbot Avatar (iff no avatar possible, this text will be used)
+            "use_cookie": false // Indicates whether data like conversation id shall be stored in a domain cookie or in the session store
         });
-        InitBot(botConfig, document.getElementById("bot"));
+        InitBot(botConfig, document.getElementById("bot")); // Create the bot and map them to <.. id=bot>-Element on the Page
     </script>
 </body>
 

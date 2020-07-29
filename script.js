@@ -1,10 +1,14 @@
 "use strict";
 
+// The AdaptiveCards (ac) and SignalR (sr) dependency.
 var ac;
 var sr;
 
+// Some Constants.
 let chatfieldTypes = Object.freeze({ "user": 1, "bot": 2 });
 let fieldTypes = Object.freeze({ "text": "text", "value": "value" });
+
+// The ConversationId of this Bot Instance as well as the (initial) configuration
 let conversationId;
 let config;
 
@@ -14,12 +18,20 @@ function InitBot(cfg, botSection) {
     botSection.style.top = sessionStorage.getItem("top");
     botSection.style.left = sessionStorage.getItem("left");
     config = cfg;
-    conversationId = sessionStorage.getItem("conversation_id");
-    //conversationId = getCookie("conversation_id"); // works in ticketsystem but not here (maybe due to localhost)
+    if (!cfg.use_cookie) {
+        conversationId = sessionStorage.getItem("conversation_id");
+    }
+    else {
+        conversationId = getCookie("conversation_id"); // works in ticketsystem but not here (maybe due to localhost)
+    }
     if (!conversationId) {
         conversationId = uuid();
-        sessionStorage.setItem("conversation_id", conversationId);
-        //setCookie("conversation_id", conversationId);
+        if (!cfg.use_cookie) {
+            sessionStorage.setItem("conversation_id", conversationId);
+        }
+        else {
+            setCookie("conversation_id", conversationId);
+        }
     }
     console.log("Conversation ID: " + conversationId);
     require(["https://unpkg.com/adaptivecards/dist/adaptivecards.js", "https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/3.1.3/signalr.min.js"], function (module_ac, module_sr) {
@@ -59,7 +71,7 @@ function SetUpBotView(botSection) {
     let title = document.createElement("p");
     title.id = "title";
     title.innerText = config.bot_title;
- 
+
     header.appendChild(CreateIcon());
     header.appendChild(title);
     inputForm.appendChild(inputField);
