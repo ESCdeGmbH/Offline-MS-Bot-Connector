@@ -1,8 +1,10 @@
 "use strict";
 
-// The AdaptiveCards (ac) and SignalR (sr) dependency.
-var ac;
-var sr;
+const cdn_signal_r = "https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/3.1.3/signalr.min.js";
+const cdn_adaptive_cards = "https://unpkg.com/adaptivecards/dist/adaptivecards.min.js";
+
+var SignalR;
+var AdaptiveCards;
 
 // Some Constants.
 let chatfieldTypes = Object.freeze({ "user": 1, "bot": 2 });
@@ -38,9 +40,10 @@ function InitBot(cfg, botSection) {
         }
     }
     console.log("Conversation ID: " + conversationId);
-    require(["https://unpkg.com/adaptivecards/dist/adaptivecards.js", "https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/3.1.3/signalr.min.js"], function(module_ac, module_sr) {
-        ac = module_ac;
-        sr = module_sr;
+
+    require([cdn_adaptive_cards, cdn_signal_r], function(module_ac, module_sr) {
+        AdaptiveCards = module_ac;
+        SignalR = module_sr;
         SetUpBotView(botSection);
         SetUpSignalR();
     });
@@ -78,7 +81,9 @@ function OpenCloseChat() {
         bot.style.display = "";
     }
     let text = config.toggle_chat.split("|")[bot_open]
-    document.getElementById('help').innerHTML = text;
+    let help = document.getElementById('help')
+    if (help)
+        help.innerHTML = text;
 }
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -131,16 +136,18 @@ function SetUpBotView(botSection) {
         sessionStorage.setItem("bot_open", bot_open);
     }
     let text = config.toggle_chat.split("|")[bot_open]
-    document.getElementById('help').innerHTML = text;
+    let help = document.getElementById('help')
+    if (help)
+        help.innerHTML = text;
 
     LoadExistingDialog();
     MakeBotDraggable(botSection, header);
 }
 
 function SetUpSignalR() {
-    let connection = new sr.HubConnectionBuilder()
+    let connection = new SignalR.HubConnectionBuilder()
         .withUrl(config.receiver_hub)
-        .configureLogging(sr.LogLevel.Information)
+        .configureLogging(SignalR.LogLevel.Information)
         .build();
 
     connection.onclose(async() => {
@@ -280,7 +287,7 @@ function SubmitACInput(data, fieldtype, text) {
 }
 
 function CreateAdaptiveCard(content) {
-    let adaptiveCard = new ac.AdaptiveCard();
+    let adaptiveCard = new AdaptiveCards.AdaptiveCard();
     adaptiveCard.onExecuteAction = function(action) {
         switch (action.constructor.name) {
             case "SubmitAction":
