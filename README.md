@@ -40,6 +40,9 @@ It contains the following parameters:
 "host": window.location.href, 
 
 // Indicates whether data like conversation id shall be stored in a domain cookie or in the session store
-"use_cookie": false 
+"use_cookie": false,
+
+// The indicators for the minimize button (separated by '|')
+"toggle_chat": "Do you need help?|Minimize Chat" 
 }
 ```
