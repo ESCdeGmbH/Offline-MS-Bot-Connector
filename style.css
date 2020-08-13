@@ -16,14 +16,14 @@
     align-items: center;
 }
 
-    #chatbot-header img {
-        width: 100%;
-    }
+#chatbot-header img {
+    width: 100%;
+}
 
-    #chatbot-header #title {
-        text-align: center;
-        margin: 0;
-    }
+#chatbot-header #title {
+    text-align: center;
+    margin: 0;
+}
 
 #bot {
     overflow: hidden;
@@ -67,15 +67,6 @@
     background-color: #ddd;
 }
 
-/*.chat-field img {
-    float: left;
-    max-width: 45px;
-    width: 100%;
-    margin-right: 20px;
-    background-color: white;
-    border-radius: 15%;
-}*/
-
 .time {
     color: #aaa;
     font-size: 0.7em;
@@ -87,16 +78,23 @@
     height: 350px;
 }
 
+
 /*begin: hide inner scrollbar*/
+
 #chat-container {
-    scrollbar-width: none; /* Firefox */
-    -ms-overflow-style: none; /* Internet Explorer 10+ */
+    scrollbar-width: none;
+    /* Firefox */
+    -ms-overflow-style: none;
+    /* Internet Explorer 10+ */
 }
 
-    #chat-container::-webkit-scrollbar { /* WebKit */
-        width: 0;
-        height: 0;
-    }
+#chat-container::-webkit-scrollbar {
+    /* WebKit */
+    width: 0;
+    height: 0;
+}
+
+
 /*end: hide inner scrollbar*/
 
 #chatbot-footer {
@@ -123,11 +121,13 @@
 
 
 /*format adaptive cards*/
+
 .ac-actionSet {
     flex-wrap: wrap !important;
 }
 
-.ac-container, .ac-adaptiveCard {
+.ac-container,
+.ac-adaptiveCard {
     background-color: transparent !important;
     padding: 0 !important;
 }
@@ -148,15 +148,16 @@ button div {
     width: auto;
     outline: none;
     text-align: center;
-    -webkit-transition-duration: 0.4s; /* Safari */
+    -webkit-transition-duration: 0.4s;
+    /* Safari */
     transition-duration: 0.4s;
     background-color: white;
     border: none;
 }
 
-    #collapsebtn:hover {
-        filter: opacity(60%);
-    }
+#collapsebtn:hover {
+    filter: opacity(60%);
+}
 
 #opencloseimg {
     cursor: pointer;

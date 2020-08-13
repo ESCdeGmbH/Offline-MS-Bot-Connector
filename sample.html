@@ -1,16 +1,17 @@
 ﻿<!DOCTYPE html>
 <html>
-
 <head>
     <meta charset="UTF-8" />
     <title>ESC-Chatbot (Sample)</title>
 </head>
 
 <body>
+    <!-- Set Stylesheet & Load needed JS files for script.js -->
     <section id="draggable-bot">
         <link rel="stylesheet" href="style.css" />
         <script src="https://unpkg.com/requirejs/require.js"></script>
         <script src="script.js"></script>
+        <!-- Container for the Bot -->
         <div id="bot"></div>
 
         <script>
@@ -30,10 +31,9 @@
             InitBot(botConfig, document.getElementById("bot")); // Create the bot and map them to <.. id=bot>-Element on the Page
         </script>
     </section>
+    <!-- Section for the chat control. "help" id is used for the toggle_chat text -->
     <section id="chatCtrl">
-        <button id="collapsebtn" onclick="OpenCloseChat();"><img id="opencloseimg" src="/chat.png" /><span
-                id="help"></span></button>
+        <button id="collapsebtn" onclick="OpenCloseChat();"><img id="opencloseimg" src="/chat.png" /><span id="help"></span></button>
     </section>
 </body>
-
 </html>

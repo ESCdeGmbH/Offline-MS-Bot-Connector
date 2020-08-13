@@ -26,21 +26,19 @@ function InitBot(cfg, botSection) {
     config = cfg;
     if (!cfg.use_cookie) {
         conversationId = sessionStorage.getItem("conversation_id");
-    }
-    else {
+    } else {
         conversationId = getCookie("conversation_id");
     }
     if (!conversationId) {
         conversationId = uuid();
         if (!cfg.use_cookie) {
             sessionStorage.setItem("conversation_id", conversationId);
-        }
-        else {
+        } else {
             setCookie("conversation_id", conversationId);
         }
     }
     console.log("Conversation ID: " + conversationId);
-    require(["https://unpkg.com/adaptivecards/dist/adaptivecards.js", "https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/3.1.3/signalr.min.js"], function (module_ac, module_sr) {
+    require(["https://unpkg.com/adaptivecards/dist/adaptivecards.js", "https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/3.1.3/signalr.min.js"], function(module_ac, module_sr) {
         ac = module_ac;
         sr = module_sr;
         SetUpBotView(botSection);
@@ -60,13 +58,14 @@ function ChangeUserId(id) {
 
 // Get a uuid string
 function uuid() {
-    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-        var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        var r = Math.random() * 16 | 0,
+            v = c == 'x' ? r : (r & 0x3 | 0x8);
         return v.toString(16);
     });
 }
 
-// Toggle open / close chat window
+// Toggle open / close chat window (also updates the text of the <span> with id "help")
 function OpenCloseChat() {
     let bot = document.getElementById("bot");
     if (bot_open) {
@@ -144,11 +143,11 @@ function SetUpSignalR() {
         .configureLogging(sr.LogLevel.Information)
         .build();
 
-    connection.onclose(async () => {
+    connection.onclose(async() => {
         await start(connection);
     });
 
-    connection.on(conversationId, async () => {
+    connection.on(conversationId, async() => {
         const resp = await fetch(config.reply_to + "v3/conversations/" + conversationId + "/poll", {
             method: 'POST'
         });
@@ -194,7 +193,7 @@ function HandleMessage(text) {
 
 
 function CreateIcon() {
-    let icon = document.createElement("img"); // TODO: Bild und Name etc. per Anfrage an Backend holen...
+    let icon = document.createElement("img");
     icon.src = config.bot_avatar;
     icon.alt = config.bot_avatar_alt;
     return icon;
@@ -205,7 +204,7 @@ function SubmitInput(event) {
     if (!input) return;
     document.getElementById("inputField").value = "";
     CreateAndAppendChatField(CreateText(input), chatfieldTypes.user);
-    event.preventDefault();  // to prevent the page to getting redirected after clicking the submit button or pressing 'Enter'
+    event.preventDefault(); // to prevent the page to getting redirected after clicking the submit button or pressing 'Enter'
     SendMessageToBot(input, fieldTypes.text);
 }
 
@@ -227,8 +226,7 @@ async function SendMessageToBot(data, fieldtype) {
         method: 'POST',
         body: JSON.stringify(payload)
     });
-    const msgStatus = await resp.status;
-    if (msgStatus != 200) {
+    if (resp.status != 200) {
         console.error("Sending message failed with status code: " + msgStatus);
     }
 }
@@ -244,7 +242,7 @@ function CreateAndAppendChatField(renderedContent, type) {
     let timeSpan = CreateTimeSpan(type);
     chatField.appendChild(timeSpan);
     document.getElementById("chat-container").appendChild(chatField);
-    chatField.scrollIntoView();  // to focus the currently added chat field
+    chatField.scrollIntoView(); // to focus the currently added chat field
 
     StoreDialog();
 }
@@ -283,7 +281,7 @@ function SubmitACInput(data, fieldtype, text) {
 
 function CreateAdaptiveCard(content) {
     let adaptiveCard = new ac.AdaptiveCard();
-    adaptiveCard.onExecuteAction = function (action) {
+    adaptiveCard.onExecuteAction = function(action) {
         switch (action.constructor.name) {
             case "SubmitAction":
                 if (typeof action.data === 'string' || action.data instanceof String)
@@ -320,7 +318,10 @@ function LoadExistingDialog() {
 
 
 function MakeBotDraggable(botSection, header) {
-    var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+    var pos1 = 0,
+        pos2 = 0,
+        pos3 = 0,
+        pos4 = 0;
 
     header.onmousedown = DragMouseDown;
 
@@ -365,7 +366,7 @@ function MakeBotDraggable(botSection, header) {
 
 
 
-String.prototype.ReplaceAll = function (search, replacement) {
+String.prototype.ReplaceAll = function(search, replacement) {
     return this.split(search).join(replacement);
 };
 
