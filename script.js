@@ -73,13 +73,13 @@ function OpenCloseChat() {
         bot_open = 0;
         sessionStorage.setItem("bot_open", bot_open);
         bot.style.display = "none";
-        document.getElementById('help').innerHTML = "Do you need help?";
     } else {
         bot_open = 1;
         sessionStorage.setItem("bot_open", bot_open);
         bot.style.display = "";
-        document.getElementById('help').innerHTML = "Minimize chat";
     }
+    let text = config.toggle_chat.split("|")[bot_open]
+    document.getElementById('help').innerHTML = text;
 }
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -131,6 +131,8 @@ function SetUpBotView(botSection) {
         bot_open = 0;
         sessionStorage.setItem("bot_open", bot_open);
     }
+    let text = config.toggle_chat.split("|")[bot_open]
+    document.getElementById('help').innerHTML = text;
 
     LoadExistingDialog();
     MakeBotDraggable(botSection, header);

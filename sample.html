@@ -24,7 +24,8 @@
                 "bot_avatar": "/bot_avatar.png", // Path to the Avatar Image of the Chatbot           
                 "bot_avatar_alt": "ESC", // The alternative (text) for the Chatbot Avatar (iff no avatar possible, this text will be used)
                 "host": window.location.href, // The Host of this Bot. Will be used as ChannelID
-                "use_cookie": false // Indicates whether data like conversation id shall be stored in a domain cookie or in the session store
+                "use_cookie": false, // Indicates whether data like conversation id shall be stored in a domain cookie or in the session store
+                "toggle_chat": "Do you need help?|Minimize Chat" // The indicators for the minimize button (separated by '|')
             });
             InitBot(botConfig, document.getElementById("bot")); // Create the bot and map them to <.. id=bot>-Element on the Page
         </script>
@@ -32,14 +33,6 @@
     <section id="chatCtrl">
         <button id="collapsebtn" onclick="OpenCloseChat();"><img id="opencloseimg" src="/chat.png" /><span
                 id="help"></span></button>
-        <script>
-            let help = document.getElementById("help");
-            if (!Number(sessionStorage.getItem("open"))) {
-                help.innerHTML = "Do you need help?";
-            } else {
-                help.innerHTML = "Minimize chat";
-            }
-        </script>
     </section>
 </body>
 
